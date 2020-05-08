@@ -1,0 +1,1 @@
+alert( 'FE is Blue' );
