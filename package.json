@@ -10,7 +10,10 @@
 		"lint:css": "wp-scripts lint-style",
 		"lint:js": "wp-scripts lint-js",
 		"start": "wp-scripts start",
-		"packages-update": "wp-scripts packages-update"
+		"packages-update": "wp-scripts packages-update",
+		"wpcs": "run-p wpcs:*",
+		"wpcs:fix": "phpcbf -p -s -n . --standard=WordPress-Extra --extensions=php",
+		"wpcs:check": "phpcs -p -s -n . --standard=WordPress-Extra --extensions=php"
 	},
 	"devDependencies": {
 		"@wordpress/scripts": "^7.1.0",
@@ -29,12 +32,13 @@
 		"ignore-emit-webpack-plugin": "^2.0.2",
 		"mini-css-extract-plugin": "^0.9.0",
 		"node-sass": "^4.13.1",
+		"npm-run-all": "^4.1.5",
 		"optimize-css-assets-webpack-plugin": "^5.0.3",
 		"postcss-loader": "^3.0.0",
 		"postcss-preset-env": "^6.7.0",
 		"sass-loader": "^8.0.2",
 		"stylelint": "^13.2.0",
-		"stylelint-config-standard": "^20.0.0",
+		"stylelint-config-wordpress": "^13.1.0",
 		"stylelint-order": "^4.0.0",
 		"stylelint-webpack-plugin": "^1.2.3",
 		"terser-webpack-plugin": "^2.3.5"
@@ -44,7 +48,7 @@
 	},
 	"husky": {
 		"hooks": {
-			"pre-commit": "phpcbf -p -s -n . --standard=WordPress-Extra --extensions=php && phpcs -p -s -n . --standard=WordPress-Extra --extensions=php"
+			"pre-commit": "wpcs"
 		}
 	}
 }
