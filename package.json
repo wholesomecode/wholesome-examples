@@ -10,8 +10,7 @@
 		"lint:css": "wp-scripts lint-style",
 		"lint:js": "wp-scripts lint-js",
 		"start": "wp-scripts start",
-		"packages-update": "wp-scripts packages-update",
-		"wpcs": "phpcs -p -s -v -n . --standard=WordPress-Extra --extensions=php"
+		"packages-update": "wp-scripts packages-update"
 	},
 	"devDependencies": {
 		"@wordpress/scripts": "^7.1.0",
@@ -45,7 +44,7 @@
 	},
 	"husky": {
 		"hooks": {
-			"pre-commit": "wpcs"
+			"pre-commit": "phpcbf -p -s -n . --standard=WordPress-Extra --extensions=php && phpcs -p -s -n . --standard=WordPress-Extra --extensions=php"
 		}
 	}
 }
