@@ -11,7 +11,7 @@
 		"lint:js": "wp-scripts lint-js",
 		"start": "wp-scripts start",
 		"packages-update": "wp-scripts packages-update",
-		"wpcs": "run-p wpcs:*",
+		"wpcs": "npm run wpcs:fix; npm run wpcs:check",
 		"wpcs:fix": "phpcbf -p -s -n . --standard=WordPress-Extra --extensions=php",
 		"wpcs:check": "phpcs -p -s -n . --standard=WordPress-Extra --extensions=php"
 	},
