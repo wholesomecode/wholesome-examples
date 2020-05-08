@@ -48,7 +48,7 @@
 	},
 	"husky": {
 		"hooks": {
-			"pre-commit": "wpcs"
+			"pre-commit": "run-s wpcs"
 		}
 	}
 }
