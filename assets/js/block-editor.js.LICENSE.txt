@@ -16,6 +16,10 @@ object-assign
 
 /*! ./save */
 
+/*! /Users/mattwatson/Sites/wholesome-examples/app/public/wp-content/plugins/wholesome-examples/src/js/block-editor.js */
+
+/*! /Users/mattwatson/Sites/wholesome-examples/app/public/wp-content/plugins/wholesome-examples/src/scss/block-editor.scss */
+
 /*! @wordpress/blocks */
 
 /*! @wordpress/element */
@@ -34,17 +38,21 @@ object-assign
 
 /*! react-is */
 
-/*!*********************!*\
-  !*** ./src/edit.js ***!
-  \*********************/
+/*!************************!*\
+  !*** ./src/js/edit.js ***!
+  \************************/
 
-/*!*********************!*\
-  !*** ./src/save.js ***!
-  \*********************/
+/*!************************!*\
+  !*** ./src/js/save.js ***!
+  \************************/
 
-/*!**********************!*\
-  !*** ./src/index.js ***!
-  \**********************/
+/*!********************************!*\
+  !*** ./src/js/block-editor.js ***!
+  \********************************/
+
+/*!************************************!*\
+  !*** ./src/scss/block-editor.scss ***!
+  \************************************/
 
 /*!***************************************!*\
   !*** external {"this":["wp","i18n"]} ***!
@@ -85,6 +93,10 @@ object-assign
 /*!*************************************************************!*\
   !*** ./node_modules/prop-types/lib/ReactPropTypesSecret.js ***!
   \*************************************************************/
+
+/*!*******************************************************************!*\
+  !*** multi ./src/scss/block-editor.scss ./src/js/block-editor.js ***!
+  \*******************************************************************/
 
 /** @license React v16.13.1
  * react-is.development.js

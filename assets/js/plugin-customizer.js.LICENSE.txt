@@ -1,0 +1,17 @@
+/*! /Users/mattwatson/Sites/wholesome-examples/app/public/wp-content/plugins/wholesome-examples/src/js/plugin-customizer.js */
+
+/*! /Users/mattwatson/Sites/wholesome-examples/app/public/wp-content/plugins/wholesome-examples/src/scss/plugin-customizer.scss */
+
+/*! no static exports found */
+
+/*!*************************************!*\
+  !*** ./src/js/plugin-customizer.js ***!
+  \*************************************/
+
+/*!*****************************************!*\
+  !*** ./src/scss/plugin-customizer.scss ***!
+  \*****************************************/
+
+/*!*****************************************************************************!*\
+  !*** multi ./src/scss/plugin-customizer.scss ./src/js/plugin-customizer.js ***!
+  \*****************************************************************************/

@@ -1,0 +1,1 @@
+{"version":3,"sources":["css ./node_modules/css-loader/dist/cjs.js!./node_modules/postcss-loader/src??ref--8-2!./node_modules/sass-loader/dist/cjs.js!./src/scss/plugin-customizer.scss"],"names":[],"mappings":"AAAA,MACA,UAAiB","file":"plugin-customizer.css","sourcesContent":[".test {\n  color: #000000; }\n"]}

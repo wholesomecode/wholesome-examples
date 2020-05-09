@@ -1,24 +1,129 @@
+/**
+ * Webpack Config
+ *
+ * Provides the following features:
+ * - Extend wp-scripts to compile build and transpile JS
+ * - JS linting and fixing
+ * - JS minification
+ * - SCSS linting and fixing
+ * - SCSS compile and buid
+ * - CSS autoprefix and polyfills
+ * - CSS minification
+ * - Friendly Webpack errors
+ * - Multiple endpoints
+ */
+
+// TODO: Document and Configure ignore-emit-webpack-plugin.
+// TODO: Decide on correct SCSS / JS paths. Build or Sub Folders.
+
+/**
+ * Imports
+ *
+ * Import node modules (installed via npm install).
+ *
+ * @wordpress/scripts/config/webpack.config
+ * (Extend wp-scripts to compile build and transpile JS)
+ * Imports the wp-scripts config file, so it can be extended.
+ * @see https://developer.wordpress.org/block-editor/packages/packages-scripts/
+ *
+ * friendly-errors-webpack-plugin
+ * (Friendly Webpack errors)
+ * Recognizes certain classes of webpack errors and cleans, aggregates
+ * and prioritizes them to provide a better Developer Experience.
+ * @see https://www.npmjs.com/package/friendly-errors-webpack-plugin
+ *
+ * mini-css-extract-plugin
+ * (SCSS compile and buid)
+ * This plugin extracts CSS into separate files. It creates a CSS file
+ * for each SCSS entry point. It supports On-Demand-Loading of CSS and
+ * SourceMaps.
+ * @see https://www.npmjs.com/package/mini-css-extract-plugin
+ *
+ * optimize-css-assets-webpack-plugin
+ * (CSS minification)
+ * Search for CSS assets during the Webpack build and optimize \
+ * minimize.
+ * @see https://www.npmjs.com/package/optimize-css-assets-webpack-plugin
+ *
+ * postcss-preset-env
+ * (CSS autoprefix and polyfills)
+ * Determines the polyfills you need.
+ * @see https://www.npmjs.com/package/postcss-preset-env
+ *
+ * stylelint-webpack-plugin
+ * (SCSS linting and fixing)
+ * Check SCSS for style errors, and where possible automatically fix
+ * them.
+ * @see https://www.npmjs.com/package/stylelint-webpack-plugin
+ *
+ * terser-webpack-plugin
+ * (JS minification)
+ * Minify JavaScript.
+ * @see https://www.npmjs.com/package/terser-webpack-plugin
+ *
+ * Note:
+ * JS linting and fixing is done by eslint-loader which is inherited
+ * from wp-scripts.
+ */
 const defaultConfig = require( '@wordpress/scripts/config/webpack.config' );
+const IgnoreEmitWebPackPlugin = require( 'ignore-emit-webpack-plugin' );
 const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
-const IgnoreEmitWebpackPlugin = require( 'ignore-emit-webpack-plugin' );
 const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
 const OptimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin');
-const path = require('path');
 const postcssPresetEnv = require( 'postcss-preset-env' );
 const StylelintWebpackPlugin = require( 'stylelint-webpack-plugin' );
 const TerserWebpackPlugin = require( 'terser-webpack-plugin' );
 
+/**
+ * Import from Node
+ *
+ * The path module provides utilities for working with file and directory paths.
+ * @see https://nodejs.org/api/path.html#path_path
+ */
+const path = require( 'path' );
+
+/**
+ * Variables
+ */
+const isProduction = process.env.NODE_ENV === 'production';
+
+/**
+ * Config
+ *
+ * Entry Points (entry)
+ *
+ * - block:
+ */
 module.exports = {
     ...defaultConfig,
     entry: {
-		...defaultConfig.entry,
-		style: path.resolve( process.cwd(), 'src', 'style.scss' ),
-		editor: path.resolve( process.cwd(), 'src', 'editor.scss' ),
+        'block': path.resolve( process.cwd(), 'src/scss', 'block.scss' ),
+        'block-editor': [
+            path.resolve( process.cwd(), 'src/scss', 'block-editor.scss' ),
+            path.resolve( process.cwd(), 'src/js', 'block-editor.js' ),
+        ],
+        'plugin': [
+            path.resolve( process.cwd(), 'src/scss', 'plugin.scss' ),
+            path.resolve( process.cwd(), 'src/js', 'plugin.js' ),
+        ],
+        'plugin-admin': [
+            path.resolve( process.cwd(), 'src/scss', 'plugin-admin.scss' ),
+            path.resolve( process.cwd(), 'src/js', 'plugin-admin.js' ),
+        ],
+        'plugin-classic-editor': path.resolve( process.cwd(), 'src/scss', 'plugin-classic-editor.scss' ),
+        'plugin-customizer': [
+            path.resolve( process.cwd(), 'src/scss', 'plugin-customizer.scss' ),
+            path.resolve( process.cwd(), 'src/js', 'plugin-customizer.js' ),
+        ],
     },
     module: {
         ...defaultConfig.module,
         rules: [
             ...defaultConfig.module.rules,
+            /**
+             * JS
+             * - JS Linting and Fixing
+             */
             {
                 test: /\.js$/,
                 include: /src/,
@@ -28,6 +133,11 @@ module.exports = {
                     fix: true,
                 },
             },
+            /**
+             * SCSS / SASS
+             * - SCSS compile and buid (MiniCssExtractPlugin)
+             * - CSS autoprefix and polyfills (postcssPresetEnv)
+             */
             {
                 test: /\.s[ac]ss$/i,
                 use: [
@@ -47,23 +157,49 @@ module.exports = {
     optimization: {
         ...defaultConfig.optimization,
         minimize: true,
+        /**
+         * Minification
+         * - CSS minification (OptimizeCssAssetsWebpackPlugin)
+         * - JS minification (TerserWebpackPlugin)
+         */
         minimizer: [
-            new OptimizeCssAssetsWebpackPlugin(),
+            new OptimizeCssAssetsWebpackPlugin({
+                cssProcessorOptions: {
+                    map: isProduction ? false : {
+                        inline: false
+                    },
+                },
+            }),
             new TerserWebpackPlugin(),
         ],
-	},
+    },
+    output: {
+        filename: './js/[name].js',
+        path: path.resolve( __dirname, 'assets' ),
+    },
+    /**
+     * Plugin Config
+     * - Friendly Webpack errors (FriendlyErrorsWebpackPlugin)
+     * - SCSS linting and fixing (StylelintWebpackPlugin)
+     * - Additional config for CSS minification (MiniCssExtractPlugin)
+     */
     plugins: [
         ...defaultConfig.plugins,
+        new IgnoreEmitWebPackPlugin( [ 'editor.js', 'style.js' ] ),
         new FriendlyErrorsWebpackPlugin(),
-        new IgnoreEmitWebpackPlugin( [ 'editor.js', 'editor.asset.php', 'style.js', 'style.asset.php', ] ),
         new StylelintWebpackPlugin({
-            files: 'src/*.s?(a|c)ss',
+            files: 'src/scss/*.s?(a|c)ss',
             failOnError: true,
             fix: true,
             syntax: 'scss',
-		}),
+        }),
         new MiniCssExtractPlugin( {
-            filename: '../build/[name].css',
+            filename: './css/[name].css',
         } ),
     ],
 };
+
+// Prevent JS source maps in production.
+if ( isProduction ) {
+    module.exports.devtool = false;
+}

@@ -3,7 +3,7 @@
  * Wholesome Examples
  *
  * Plugin Name:     Wholesome Examples
- * Plugin URI:      https://wholesomecode.ltd
+ * Plugin URI:      https://github.com/wholesomecode/wholesome-examples
  * Description:     Best Practice WordPress Examples.
  * Version:         0.1.0
  * Author:          Wholesome Code <hello@wholesomecode.ltd>
@@ -27,9 +27,10 @@ namespace WholesomeCode\WholesomeExamples; // @codingStandardsIgnoreLine
  *
  * @see https://engineering.hmn.md/standards/structure/
  */
-const ROOT_DIR  = __DIR__;
-const ROOT_FILE = __FILE__;
-const PREFIX    = 'wholesomecode_wholesome_examples';
+const PLUGIN_PREFIX = 'wholesomecode_wholesome_examples';
+const PLUGIN_SLUG   = 'wholesomecode-wholesome-examples';
+const ROOT_DIR      = __DIR__;
+const ROOT_FILE     = __FILE__;
 
 require_once ROOT_DIR . '/inc/namespace.php';
 

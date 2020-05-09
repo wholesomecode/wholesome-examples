@@ -89,8 +89,8 @@
 	"description": "Best-practice WordPress code examples.",
 	"author": "mattwatsoncodes, wholesomecode",
 	"license": "GPL-2.0-or-later",
-	"repository": "https://github.com/wholesomecode",
-	"main": "build/install.js",
+	"repository": "https://github.com/wholesomecode/wholesome-examples",
+	"main": "assets/js/block-editor.js",
 	"scripts": {
 		"build": "wp-scripts build",
 		"packages-update": "wp-scripts packages-update",

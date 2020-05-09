@@ -123,7 +123,7 @@ function load_assets() {
  */
 function load_block_assets() {
 
-	$styles = '/style.css';
+	$styles = '/build/style.css';
 
 	// Enqueue Styles.
 	wp_enqueue_style(
@@ -147,7 +147,7 @@ function load_block_assets() {
 function load_editor_assets() {
 
 	$scripts = '/build/index.js';
-	$styles  = '/editor.css';
+	$styles  = '/build/editor.css';
 
 	// Enqueue editor JS.
 	wp_enqueue_script(
