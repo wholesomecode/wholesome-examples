@@ -5,6 +5,7 @@
  * - Extend wp-scripts to compile build and transpile JS
  * - JS linting and fixing
  * - JS minification
+ * - Prevent incorrect file creation
  * - SCSS linting and fixing
  * - SCSS compile and buid
  * - CSS autoprefix and polyfills
@@ -12,9 +13,6 @@
  * - Friendly Webpack errors
  * - Multiple endpoints
  */
-
-// TODO: Document and Configure ignore-emit-webpack-plugin.
-// TODO: Decide on correct SCSS / JS paths. Build or Sub Folders.
 
 /**
  * Imports
@@ -25,6 +23,11 @@
  * (Extend wp-scripts to compile build and transpile JS)
  * Imports the wp-scripts config file, so it can be extended.
  * @see https://developer.wordpress.org/block-editor/packages/packages-scripts/
+ *
+ * ignore-emit-webpack-plugin
+ * (Prevent incorrect file creation)
+ * Prevent files from being emitted in a webpack build.
+ * @see https://www.npmjs.com/package/ignore-emit-webpack-plugin
  *
  * friendly-errors-webpack-plugin
  * (Friendly Webpack errors)
@@ -89,32 +92,57 @@ const isProduction = process.env.NODE_ENV === 'production';
 
 /**
  * Config
- *
- * Entry Points (entry)
- *
- * - block:
  */
 module.exports = {
     ...defaultConfig,
+    /**
+     * Entry Points
+     *
+     * Multiple entry points for WordPress style and script types.
+     *
+     * Admin
+     * - admin.js: scripts for WordPress Admin area.
+     * - admin.scss: styles for the WordPress Admin area.
+     *
+     * Block Styles
+     * - block-styles.scss: styles for the front end and the block
+     *   editor.
+     *
+     * Block Editor
+     * - block-editor.js: scripts for the block editor.
+     * - block-editor.scss: styles for the block editor only.
+     *
+     * Classic Editor
+     * - classic-editor.scss: styles for the classic editor TinyMCE
+     *   textaea
+     *
+     * Customizer
+     * - customizer.js: scripts for the Customizer screen.
+     * - customizer.scss: styles for the Customizer screen.
+     *
+     * Scripts
+     * - scripts.js: scripts for the front end of the site.
+     *
+     * Styles
+     * - styles.scss: styles for the front end of the site.
+     */
     entry: {
-        'block': path.resolve( process.cwd(), 'src/scss', 'block.scss' ),
+        'admin': [
+            path.resolve( process.cwd(), 'src', 'admin.js' ),
+            path.resolve( process.cwd(), 'src', 'admin.scss' ),
+        ],
+        'block-styles': path.resolve( process.cwd(), 'src', 'block-styles.scss' ),
         'block-editor': [
-            path.resolve( process.cwd(), 'src/scss', 'block-editor.scss' ),
-            path.resolve( process.cwd(), 'src/js', 'block-editor.js' ),
+            path.resolve( process.cwd(), 'src', 'block-editor.js' ),
+            path.resolve( process.cwd(), 'src', 'block-editor.scss' ),
         ],
-        'plugin': [
-            path.resolve( process.cwd(), 'src/scss', 'plugin.scss' ),
-            path.resolve( process.cwd(), 'src/js', 'plugin.js' ),
+        'classic-editor': path.resolve( process.cwd(), 'src', 'classic-editor.scss' ),
+        'customizer': [
+            path.resolve( process.cwd(), 'src', 'customizer.js' ),
+            path.resolve( process.cwd(), 'src', 'customizer.scss' ),
         ],
-        'plugin-admin': [
-            path.resolve( process.cwd(), 'src/scss', 'plugin-admin.scss' ),
-            path.resolve( process.cwd(), 'src/js', 'plugin-admin.js' ),
-        ],
-        'plugin-classic-editor': path.resolve( process.cwd(), 'src/scss', 'plugin-classic-editor.scss' ),
-        'plugin-customizer': [
-            path.resolve( process.cwd(), 'src/scss', 'plugin-customizer.scss' ),
-            path.resolve( process.cwd(), 'src/js', 'plugin-customizer.js' ),
-        ],
+        'scripts': path.resolve( process.cwd(), 'src', 'scripts.js' ),
+        'styles': path.resolve( process.cwd(), 'src', 'styles.scss' ),
     },
     module: {
         ...defaultConfig.module,
@@ -174,27 +202,32 @@ module.exports = {
         ],
     },
     output: {
-        filename: './js/[name].js',
-        path: path.resolve( __dirname, 'assets' ),
+        filename: './[name].js',
+        path: path.resolve( __dirname, 'build' ),
     },
     /**
      * Plugin Config
+     * - Prevent incorrect file creation (IgnoreEmitWebPackPlugin)
      * - Friendly Webpack errors (FriendlyErrorsWebpackPlugin)
      * - SCSS linting and fixing (StylelintWebpackPlugin)
      * - Additional config for CSS minification (MiniCssExtractPlugin)
      */
     plugins: [
         ...defaultConfig.plugins,
-        new IgnoreEmitWebPackPlugin( [ 'editor.js', 'style.js' ] ),
+        new IgnoreEmitWebPackPlugin([
+            'admin.asset.php',
+            'customizer.asset.php',
+            'scripts.asset.php',
+        ]),
         new FriendlyErrorsWebpackPlugin(),
         new StylelintWebpackPlugin({
-            files: 'src/scss/*.s?(a|c)ss',
+            files: 'src/**/*.s?(a|c)ss',
             failOnError: true,
             fix: true,
             syntax: 'scss',
         }),
         new MiniCssExtractPlugin( {
-            filename: './css/[name].css',
+            filename: './[name].css',
         } ),
     ],
 };

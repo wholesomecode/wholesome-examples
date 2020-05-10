@@ -1,1 +1,0 @@
-alert( 'FE is Blue' );

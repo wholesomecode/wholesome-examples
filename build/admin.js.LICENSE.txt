@@ -1,0 +1,17 @@
+/*! /Users/mattwatson/Sites/wholesome-examples/app/public/wp-content/plugins/wholesome-examples/src/admin.js */
+
+/*! /Users/mattwatson/Sites/wholesome-examples/app/public/wp-content/plugins/wholesome-examples/src/admin.scss */
+
+/*! no static exports found */
+
+/*!**********************!*\
+  !*** ./src/admin.js ***!
+  \**********************/
+
+/*!************************!*\
+  !*** ./src/admin.scss ***!
+  \************************/
+
+/*!*********************************************!*\
+  !*** multi ./src/admin.js ./src/admin.scss ***!
+  \*********************************************/
