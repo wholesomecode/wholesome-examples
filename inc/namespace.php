@@ -34,7 +34,7 @@ function setup() : void {
 	 * Block assets enqueued with `enqueue_block_assets` and
 	 * `enqueue_block_editor_assets`, allowing multiple blocks within the project.
 	 *
-	 * For the alternate `register_block_type` method (enqueing assets for a singular
+	 * For the alternate `register_block_type` method (enqueueing assets for a singular
 	 * block) see /documentation/alternatives/enqueue-block-assets.php
 	 */
 	enqueue_assets();
@@ -99,7 +99,7 @@ function enqueue_block_editor_assets() {
 		true
 	);
 
-	// Enqueue edtior Styles.
+	// Enqueue editior Styles.
 	wp_enqueue_style(
 		'plugin-name-block-editor',
 		plugins_url( $styles, ROOT_FILE ),
@@ -147,7 +147,7 @@ function enqueue_admin_assets() {
 		filemtime( ROOT_DIR . $styles ),
 	);
 
-	// Enqueue edtior JS.
+	// Enqueue editior JS.
 	wp_enqueue_script(
 		'plugin-name-admin',
 		plugins_url( $scripts, ROOT_FILE ),
@@ -170,7 +170,7 @@ function enqueue_customizer_assets() {
 		filemtime( ROOT_DIR . $styles ),
 	);
 
-	// Enqueue edtior JS.
+	// Enqueue editior JS.
 	wp_enqueue_script(
 		'plugin-name-customizer',
 		plugins_url( $scripts, ROOT_FILE ),

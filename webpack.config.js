@@ -7,7 +7,7 @@
  * - JS minification
  * - Prevent incorrect file creation
  * - SCSS linting and fixing
- * - SCSS compile and buid
+ * - SCSS compile and build
  * - CSS autoprefix and polyfills
  * - CSS minification
  * - Friendly Webpack errors
@@ -36,7 +36,7 @@
  * @see https://www.npmjs.com/package/friendly-errors-webpack-plugin
  *
  * mini-css-extract-plugin
- * (SCSS compile and buid)
+ * (SCSS compile and build)
  * This plugin extracts CSS into separate files. It creates a CSS file
  * for each SCSS entry point. It supports On-Demand-Loading of CSS and
  * SourceMaps.
@@ -114,7 +114,7 @@ module.exports = {
      *
      * Classic Editor
      * - classic-editor.scss: styles for the classic editor TinyMCE
-     *   textaea
+     *   textarea
      *
      * Customizer
      * - customizer.js: scripts for the Customizer screen.
@@ -163,7 +163,7 @@ module.exports = {
             },
             /**
              * SCSS / SASS
-             * - SCSS compile and buid (MiniCssExtractPlugin)
+             * - SCSS compile and build (MiniCssExtractPlugin)
              * - CSS autoprefix and polyfills (postcssPresetEnv)
              */
             {
