@@ -2,10 +2,6 @@
 /**
  * Main plugin file.
  *
- * File layout and namespacing lovingly borrowed from the
- * Human Made engineering handbock.
- * @see https://engineering.hmn.md/standards/style/php/#namespace-and-class-naming
- *
  * @package wholesomecode/wholesome_examples
  */
 

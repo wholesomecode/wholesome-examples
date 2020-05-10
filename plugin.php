@@ -34,5 +34,16 @@ const ROOT_FILE     = __FILE__;
 
 require_once ROOT_DIR . '/inc/namespace.php';
 
-// Load plugin.
+/**
+ * Load Plugin
+ *
+ * Aside: Namespace Pattern
+ *
+ * File layout and namespacing lovingly borrowed from the
+ * Human Made engineering handbook.
+ *
+ * TODO: Namespace.md in reference.
+ *
+ * @see https://engineering.hmn.md/standards/style/php/#namespace-and-class-naming
+ */
 add_action( 'plugins_loaded', __NAMESPACE__ . '\\setup' );
