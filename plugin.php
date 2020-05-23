@@ -42,7 +42,7 @@ require_once ROOT_DIR . '/inc/namespace.php';
  * File layout and namespacing lovingly borrowed from the
  * Human Made engineering handbook.
  *
- * TODO: Namespace.md in reference.
+ * TODO: document namespace choices in documentation/reference/namespace.md
  *
  * @see https://engineering.hmn.md/standards/style/php/#namespace-and-class-naming
  */

@@ -8,13 +8,6 @@
 namespace WholesomeCode\WholesomeExamples; // @codingStandardsIgnoreLine
 
 /**
- * TODO:
- *
- * - Finish inline comments
- * - Ensure correct PREFIX, ASSETS, ETC...
- */
-
-/**
  * Setup
  *
  * - Load text domain.
@@ -28,6 +21,9 @@ function setup() : void {
 	// Load text domain.
 	load_plugin_textdomain( 'wholesome-examples', false, ROOT_DIR . '\languages' );
 
+	// Block categories -
+	add_action( 'block_categories', __NAMESPACE__ . '\\block_categories', 10, 2 );
+
 	/**
 	 * Enqueue Assets
 	 *
@@ -39,13 +35,21 @@ function setup() : void {
 	 */
 	enqueue_assets();
 
-	// /**
-	//  * Setup Block Categories
-	//  *
-	//  * If you would like an additional category for your block (in addition to common,
-	//  * layout, widget etc... ). This is the hook to set it.
-	//  */
-	// add_action( 'block_categories', array( $this, 'block_categories' ), 10, 2 );
+	/**
+	 * Load plugin features.
+	 *
+	 * Load the namespace of each of the plugin features.
+	 */
+
+	/**
+	 * Site Health.
+	 *
+	 * Example removal of the WordPress Site Health feature, featuring
+	 * the removal of the Site Health menu item (`remove_submenu_page`) and the
+	 * Site Health dashboard widget (`remove_meta_box`).
+	 */
+	require_once ROOT_DIR . '/inc/site_health/namespace.php';
+	SiteHealth\setup();
 }
 
 /**
@@ -53,139 +57,228 @@ function setup() : void {
  */
 function enqueue_assets() {
 
-	// Load Block Front and Back End Assets (can use a conditional to restrict load).
+	// Block Styles - styles for the front end and block editor.
 	add_action( 'enqueue_block_assets', __NAMESPACE__ . '\\enqueue_block_styles', 10 );
 
-	// Load Block Editor Assets.
+	// Block Editor Assets - scripts and styles for the block editor only.
 	add_action( 'enqueue_block_editor_assets', __NAMESPACE__ . '\\enqueue_block_editor_assets', 10 );
 
-	// Load Front End Assets.
+	// Plugin Assets - scripts and styles for the front end of the site.
 	add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\enqueue_plugin_assets', 10 );
 
-	// Load WordPress Global Admin Assets.
+	// Admin Assets - scripts and styles for the WordPress admin area.
 	add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\enqueue_admin_assets', 10 );
 
-	// Load Customizer Assets.
+	// Customizer Assets - scripts and styles for the Customizer screen.
 	add_action( 'customize_preview_init', __NAMESPACE__ . '\\enqueue_customizer_assets', 10 );
 
-	// Classic Editor Styles.
+	// Classic Editor Styles - styles for the classic editor TinyMCE textarea.
 	add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\\enqueue_classic_editor_styles', 10 );
 }
 
-function enqueue_block_styles() {
+/**
+ * Enqueue Block Styles
+ *
+ * - block-styles.scss: styles for the front end and the block
+ *   editor.
+ *
+ * @return void
+ */
+function enqueue_block_styles() : void {
 
-	$styles = '/build/block-style.css';
+	$block_styles = '/build/block-styles.css';
 
-	// Enqueue Styles.
 	wp_enqueue_style(
-		'plugin-name-block',
-		plugins_url( $styles, ROOT_FILE ),
+		PLUGIN_SLUG . '-block-styles',
+		plugins_url( $block_styles, ROOT_FILE ),
 		[],
-		filemtime( ROOT_DIR . $styles )
+		filemtime( ROOT_DIR . $block_styles )
 	);
 }
 
-function enqueue_block_editor_assets() {
+/**
+ * Enqueue Block Editor Assets
+ *
+ * - block-editor.js: scripts for the block editor.
+ * - block-editor.scss: styles for the block editor only.
+ * - localize the script with custom settings.
+ *
+ * @return void
+ */
+function enqueue_block_editor_assets() : void {
 
-	$scripts = '/build/block-editor.js';
-	$styles  = '/build/block-editor.css';
+	$block_editor_asset_path = ROOT_DIR . '/build/block-editor.asset.php';
 
-	// Enqueue editor JS.
+	if ( ! file_exists( $block_editor_asset_path ) ) {
+		throw new Error(
+			esc_html__( 'You need to run `npm start` or `npm run build` in the root of the plugin "wholesomecode/wholesome-examples" first.', 'wholesome-examples' )
+		);
+	}
+
+	$block_editor_scripts = '/build/block-editor.js';
+	$block_editor_styles  = '/build/block-editor.css';
+	$block_settings       = get_block_settings();
+
 	wp_enqueue_script(
-		'plugin-name-block-editor',
-		plugins_url( $scripts, ROOT_FILE ),
-		[ 'wp-blocks', 'wp-element', 'wp-i18n', 'wp-polyfill' ],
-		filemtime( ROOT_DIR . $scripts ),
+		PLUGIN_SLUG . '-block-editor',
+		plugins_url( $block_editor_scripts, ROOT_FILE ),
+		$script_asset['dependencies'],
+		$script_asset['version'],
 		true
 	);
 
-	// Enqueue editior Styles.
 	wp_enqueue_style(
-		'plugin-name-block-editor',
-		plugins_url( $styles, ROOT_FILE ),
+		PLUGIN_SLUG . '-block-editor',
+		plugins_url( $block_editor_styles, ROOT_FILE ),
 		[],
-		filemtime( ROOT_DIR . $styles )
+		filemtime( ROOT_DIR . $block_editor_styles )
+	);
+
+	wp_localize_script(
+		PLUGIN_SLUG . '-block-editor',
+		'WholesomeExamplesSettings',
+		$block_settings
 	);
 }
 
-function enqueue_plugin_assets() {
+/**
+ * Enqueue Plugin Assets
+ *
+ * - scripts.js: scripts for the front end of the site.
+ * - styles.scss: styles for the front end of the site.
+ *
+ * @return void
+ */
+function enqueue_plugin_assets() : void {
 
 	$scripts = '/build/scripts.js';
 	$styles  = '/build/styles.css';
 
-	// // Example: JavaScript will run on the Front End only.
-	// if ( ! is_admin() ) {
-		// Enqueue JS.
-		wp_enqueue_script(
-			'plugin-name',
-			plugins_url( $scripts, ROOT_FILE ),
-			[], //$this->dependencies,
-			filemtime( ROOT_DIR . $scripts ),
-			true
-		);
-	// }
+	wp_enqueue_script(
+		PLUGIN_SLUG . '-scripts',
+		plugins_url( $scripts, ROOT_FILE ),
+		[],
+		filemtime( ROOT_DIR . $scripts ),
+		true
+	);
 
-	// Enqueue Styles.
 	wp_enqueue_style(
-		'plugin-name',
+		PLUGIN_SLUG . '-styles',
 		plugins_url( $styles, ROOT_FILE ),
 		[],
 		filemtime( ROOT_DIR . $styles )
 	);
 }
 
-function enqueue_admin_assets() {
+/**
+ * Enqueue Admin Assets
+ *
+ * - admin.js: scripts for WordPress Admin area.
+ * - admin.scss: styles for the WordPress Admin area.
+ *
+ * @return void
+ */
+function enqueue_admin_assets() : void {
 
-	$styles  = '/build/admin.css';
-	$scripts = '/build/admin.js';
+	$admin_scripts = '/build/admin.js';
+	$admin_styles  = '/build/admin.css';
 
-	// Enqueue Styles.
-	wp_enqueue_style(
-		'plugin-name-admin',
-		plugins_url( $styles, ROOT_FILE ),
+	wp_enqueue_script(
+		PLUGIN_SLUG . '-admin',
+		plugins_url( $admin_scripts, ROOT_FILE ),
 		[],
-		filemtime( ROOT_DIR . $styles ),
+		filemtime( ROOT_DIR . $admin_scripts ),
+		true
 	);
 
-	// Enqueue editior JS.
-	wp_enqueue_script(
-		'plugin-name-admin',
-		plugins_url( $scripts, ROOT_FILE ),
+	wp_enqueue_style(
+		PLUGIN_SLUG . '-admin',
+		plugins_url( $admin_styles, ROOT_FILE ),
 		[],
-		filemtime( ROOT_DIR . $scripts ),
-		true
+		filemtime( ROOT_DIR . $admin_styles ),
 	);
 }
 
-function enqueue_customizer_assets() {
+/**
+ * Enqueue Customizer Assets
+ *
+ * - customizer.js: scripts for the Customizer screen.
+ * - customizer.scss: styles for the Customizer screen.
+ *
+ * @return void
+ */
+function enqueue_customizer_assets() : void {
 
-	$styles  = '/build/customizer.css';
-	$scripts = '/build/customizer.js';
+	$customizer_scripts = '/build/customizer.js';
+	$customizer_styles  = '/build/customizer.css';
 
-	// Enqueue Styles.
-	wp_enqueue_style(
-		'plugin-name-customizer',
-		plugins_url( $styles, ROOT_FILE ),
+	wp_enqueue_script(
+		PLUGIN_SLUG . 'customizer',
+		plugins_url( $customizer_scripts, ROOT_FILE ),
 		[],
-		filemtime( ROOT_DIR . $styles ),
+		filemtime( ROOT_DIR . $customizer_scripts ),
+		true
 	);
 
-	// Enqueue editior JS.
-	wp_enqueue_script(
-		'plugin-name-customizer',
-		plugins_url( $scripts, ROOT_FILE ),
-		[], //$this->dependencies,
-		filemtime( ROOT_DIR . $scripts ),
-		true
+	wp_enqueue_style(
+		PLUGIN_SLUG . 'customizer',
+		plugins_url( $customizer_styles, ROOT_FILE ),
+		[],
+		filemtime( ROOT_DIR . $customizer_styles ),
 	);
 }
 
-function enqueue_classic_editor_styles() {
+/**
+ * Enqueue Classic Editor Styles
+ *
+ * - classic-editor.scss: styles for the classic editor TinyMCE
+ *   textarea.
+ *
+ * @return void
+ */
+function enqueue_classic_editor_styles() : void {
 
-	$styles = '/build/classic-editor.css';
+	$classic_editor = '/build/classic-editor.css';
 
 	add_editor_style(
-		plugins_url( $styles, ROOT_FILE ) .
-		'?v=' . filemtime( ROOT_DIR . $styles )
+		plugins_url( $classic_editor, ROOT_FILE ) .
+		'?v=' . filemtime( ROOT_DIR . $classic_editor )
+	);
+}
+
+/**
+ * Get Block Settings.
+ *
+ * Returns an array of settings which can be passed into the
+ * application.
+ *
+ * Populate this with settings unique to your application.
+ *
+ * @return array
+ */
+function get_block_settings() : array {
+	return [
+		'ajaxUrl' => esc_url( admin_url( 'admin-ajax.php', 'relative' ) ),
+	];
+}
+
+/**
+ * Block Categories
+ *
+ * Create a custom block category to categorize your blocks.
+ * @see https://developer.wordpress.org/block-editor/developers/filters/block-filters/#managing-block-categories
+ *
+ * @param array $categories Array of categories.
+ * @return array Array of categories.
+ */
+function block_categories( $categories ) : array {
+	return array_merge(
+		$categories,
+		[
+			[
+				'slug'  => 'wholesome-blocks',
+				'title' => __( 'Wholesome Blocks', 'wholesome-examples' ),
+			],
+		]
 	);
 }

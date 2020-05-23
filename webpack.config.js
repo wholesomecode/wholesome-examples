@@ -70,9 +70,9 @@
  */
 const defaultConfig = require( '@wordpress/scripts/config/webpack.config' );
 const IgnoreEmitWebPackPlugin = require( 'ignore-emit-webpack-plugin' );
-const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
+const FriendlyErrorsWebpackPlugin = require( 'friendly-errors-webpack-plugin' );
 const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
-const OptimizeCssAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin');
+const OptimizeCssAssetsWebpackPlugin = require( 'optimize-css-assets-webpack-plugin' );
 const postcssPresetEnv = require( 'postcss-preset-env' );
 const StylelintWebpackPlugin = require( 'stylelint-webpack-plugin' );
 const TerserWebpackPlugin = require( 'terser-webpack-plugin' );
@@ -94,145 +94,145 @@ const isProduction = process.env.NODE_ENV === 'production';
  * Config
  */
 module.exports = {
-    ...defaultConfig,
-    /**
-     * Entry Points
-     *
-     * Multiple entry points for WordPress style and script types.
-     *
-     * Admin
-     * - admin.js: scripts for WordPress Admin area.
-     * - admin.scss: styles for the WordPress Admin area.
-     *
-     * Block Styles
-     * - block-styles.scss: styles for the front end and the block
-     *   editor.
-     *
-     * Block Editor
-     * - block-editor.js: scripts for the block editor.
-     * - block-editor.scss: styles for the block editor only.
-     *
-     * Classic Editor
-     * - classic-editor.scss: styles for the classic editor TinyMCE
-     *   textarea
-     *
-     * Customizer
-     * - customizer.js: scripts for the Customizer screen.
-     * - customizer.scss: styles for the Customizer screen.
-     *
-     * Scripts
-     * - scripts.js: scripts for the front end of the site.
-     *
-     * Styles
-     * - styles.scss: styles for the front end of the site.
-     */
-    entry: {
-        'admin': [
-            path.resolve( process.cwd(), 'src', 'admin.js' ),
-            path.resolve( process.cwd(), 'src', 'admin.scss' ),
-        ],
-        'block-styles': path.resolve( process.cwd(), 'src', 'block-styles.scss' ),
-        'block-editor': [
-            path.resolve( process.cwd(), 'src', 'block-editor.js' ),
-            path.resolve( process.cwd(), 'src', 'block-editor.scss' ),
-        ],
-        'classic-editor': path.resolve( process.cwd(), 'src', 'classic-editor.scss' ),
-        'customizer': [
-            path.resolve( process.cwd(), 'src', 'customizer.js' ),
-            path.resolve( process.cwd(), 'src', 'customizer.scss' ),
-        ],
-        'scripts': path.resolve( process.cwd(), 'src', 'scripts.js' ),
-        'styles': path.resolve( process.cwd(), 'src', 'styles.scss' ),
-    },
-    module: {
-        ...defaultConfig.module,
-        rules: [
-            ...defaultConfig.module.rules,
-            /**
-             * JS
-             * - JS Linting and Fixing
-             */
-            {
-                test: /\.js$/,
-                include: /src/,
-                exclude: /node_modules/,
-                loader: 'eslint-loader',
-                options: {
-                    fix: true,
-                },
-            },
-            /**
-             * SCSS / SASS
-             * - SCSS compile and build (MiniCssExtractPlugin)
-             * - CSS autoprefix and polyfills (postcssPresetEnv)
-             */
-            {
-                test: /\.s[ac]ss$/i,
-                use: [
-                    { loader: MiniCssExtractPlugin.loader },
-                    { loader: 'css-loader' },
-                    {
+	...defaultConfig,
+	/**
+	 * Entry Points
+	 *
+	 * Multiple entry points for WordPress style and script types.
+	 *
+	 * Admin
+	 * - admin.js: scripts for WordPress Admin area.
+	 * - admin.scss: styles for the WordPress Admin area.
+	 *
+	 * Block Styles
+	 * - block-styles.scss: styles for the front end and the block
+	 *   editor.
+	 *
+	 * Block Editor
+	 * - block-editor.js: scripts for the block editor.
+	 * - block-editor.scss: styles for the block editor only.
+	 *
+	 * Classic Editor
+	 * - classic-editor.scss: styles for the classic editor TinyMCE
+	 *   textarea.
+	 *
+	 * Customizer
+	 * - customizer.js: scripts for the Customizer screen.
+	 * - customizer.scss: styles for the Customizer screen.
+	 *
+	 * Scripts
+	 * - scripts.js: scripts for the front end of the site.
+	 *
+	 * Styles
+	 * - styles.scss: styles for the front end of the site.
+	 */
+	entry: {
+		'admin': [
+			path.resolve( process.cwd(), 'src', 'admin.js' ),
+			path.resolve( process.cwd(), 'src', 'admin.scss' ),
+		],
+		'block-styles': path.resolve( process.cwd(), 'src', 'block-styles.scss' ),
+		'block-editor': [
+			path.resolve( process.cwd(), 'src', 'block-editor.js' ),
+			path.resolve( process.cwd(), 'src', 'block-editor.scss' ),
+		],
+		'classic-editor': path.resolve( process.cwd(), 'src', 'classic-editor.scss' ),
+		'customizer': [
+			path.resolve( process.cwd(), 'src', 'customizer.js' ),
+			path.resolve( process.cwd(), 'src', 'customizer.scss' ),
+		],
+		'scripts': path.resolve( process.cwd(), 'src', 'scripts.js' ),
+		'styles': path.resolve( process.cwd(), 'src', 'styles.scss' ),
+	},
+	module: {
+		...defaultConfig.module,
+		rules: [
+			...defaultConfig.module.rules,
+			/**
+			 * JS
+			 * - JS Linting and Fixing
+			 */
+			{
+				test: /\.js$/,
+				include: /src/,
+				exclude: /node_modules/,
+				loader: 'eslint-loader',
+				options: {
+					fix: true,
+				},
+			},
+			/**
+			 * SCSS / SASS
+			 * - SCSS compile and build (MiniCssExtractPlugin)
+			 * - CSS autoprefix and polyfills (postcssPresetEnv)
+			 */
+			{
+				test: /\.s[ac]ss$/i,
+				use: [
+					{ loader: MiniCssExtractPlugin.loader },
+					{ loader: 'css-loader' },
+					{
 						loader: 'postcss-loader',
 						options: {
 							plugins: () => [ postcssPresetEnv( { stage: 3 } ) ],
 						},
 					},
-                    { loader: 'sass-loader' },
-                ],
-            },
-        ],
-    },
-    optimization: {
-        ...defaultConfig.optimization,
-        minimize: true,
-        /**
-         * Minification
-         * - CSS minification (OptimizeCssAssetsWebpackPlugin)
-         * - JS minification (TerserWebpackPlugin)
-         */
-        minimizer: [
-            new OptimizeCssAssetsWebpackPlugin({
-                cssProcessorOptions: {
-                    map: isProduction ? false : {
-                        inline: false
-                    },
-                },
-            }),
-            new TerserWebpackPlugin(),
-        ],
-    },
-    output: {
-        filename: './[name].js',
-        path: path.resolve( __dirname, 'build' ),
-    },
-    /**
-     * Plugin Config
-     * - Prevent incorrect file creation (IgnoreEmitWebPackPlugin)
-     * - Friendly Webpack errors (FriendlyErrorsWebpackPlugin)
-     * - SCSS linting and fixing (StylelintWebpackPlugin)
-     * - Additional config for CSS minification (MiniCssExtractPlugin)
-     */
-    plugins: [
-        ...defaultConfig.plugins,
-        new IgnoreEmitWebPackPlugin([
-            'admin.asset.php',
-            'customizer.asset.php',
-            'scripts.asset.php',
-        ]),
-        new FriendlyErrorsWebpackPlugin(),
-        new StylelintWebpackPlugin({
-            files: 'src/**/*.s?(a|c)ss',
-            failOnError: true,
-            fix: true,
-            syntax: 'scss',
-        }),
-        new MiniCssExtractPlugin( {
-            filename: './[name].css',
-        } ),
-    ],
+					{ loader: 'sass-loader' },
+				],
+			},
+		],
+	},
+	optimization: {
+		...defaultConfig.optimization,
+		minimize: true,
+		/**
+		 * Minification
+		 * - CSS minification (OptimizeCssAssetsWebpackPlugin)
+		 * - JS minification (TerserWebpackPlugin)
+		 */
+		minimizer: [
+			new OptimizeCssAssetsWebpackPlugin( {
+				cssProcessorOptions: {
+					map: isProduction ? false : {
+						inline: false,
+					},
+				},
+			} ),
+			new TerserWebpackPlugin(),
+		],
+	},
+	output: {
+		filename: './[name].js',
+		path: path.resolve( __dirname, 'build' ),
+	},
+	/**
+	 * Plugin Config
+	 * - Prevent incorrect file creation (IgnoreEmitWebPackPlugin)
+	 * - Friendly Webpack errors (FriendlyErrorsWebpackPlugin)
+	 * - SCSS linting and fixing (StylelintWebpackPlugin)
+	 * - Additional config for CSS minification (MiniCssExtractPlugin)
+	 */
+	plugins: [
+		...defaultConfig.plugins,
+		new IgnoreEmitWebPackPlugin( [
+			'admin.asset.php',
+			'customizer.asset.php',
+			'scripts.asset.php',
+		] ),
+		new FriendlyErrorsWebpackPlugin(),
+		new StylelintWebpackPlugin( {
+			files: 'src/**/*.s?(a|c)ss',
+			failOnError: true,
+			fix: true,
+			syntax: 'scss',
+		} ),
+		new MiniCssExtractPlugin( {
+			filename: './[name].css',
+		} ),
+	],
 };
 
 // Prevent JS source maps in production.
 if ( isProduction ) {
-    module.exports.devtool = false;
+	module.exports.devtool = false;
 }
