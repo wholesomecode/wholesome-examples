@@ -42,13 +42,21 @@ function setup() : void {
 	 */
 
 	/**
+	 * Editor.
+	 *
+	 * PHP functions that relate to the WordPress block editor (gutenberg).
+	 */
+	require_once ROOT_DIR . '/inc/editor/namespace.php';
+	Editor\setup();
+
+	/**
 	 * Site Health.
 	 *
 	 * Example removal of the WordPress Site Health feature, featuring
 	 * the removal of the Site Health menu item (`remove_submenu_page`) and the
 	 * Site Health dashboard widget (`remove_meta_box`).
 	 */
-	require_once ROOT_DIR . '/inc/site_health/namespace.php';
+	require_once ROOT_DIR . '/inc/site-health/namespace.php';
 	SiteHealth\setup();
 }
 
@@ -117,7 +125,15 @@ function enqueue_block_editor_assets() : void {
 
 	$block_editor_scripts = '/build/block-editor.js';
 	$block_editor_styles  = '/build/block-editor.css';
-	$block_settings       = get_block_settings();
+
+	/**
+	 * Settings.
+	 *
+	 * Settings have a filter so other parts of the plugin can append settings
+	 * without the code
+	 */
+	// Settings has a filter so that other parts of the plugin can append settings.
+	$block_settings = apply_filters( PLUGIN_PREFIX . '_block_settings', get_block_settings() );
 
 	wp_enqueue_script(
 		PLUGIN_SLUG . '-block-editor',

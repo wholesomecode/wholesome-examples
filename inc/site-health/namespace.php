@@ -10,6 +10,7 @@
  *   can still access hidden items if they know the url).
  * - Reference adding and removing toolbar menu items (inc logo change)
  * - Menu item reordering.
+ * - Prevent theme/plugin editing and upgrading on live server.
  *
  * @package wholesomecode/wholesome_examples
  */

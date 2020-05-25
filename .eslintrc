@@ -36,6 +36,7 @@
 			"functions": "ignore"
 		}],
 		"computed-property-spacing": [2, "always"],
+		"import/no-extraneous-dependencies": 0,
 		"import/no-named-as-default": 0,
 		"import/no-unresolved": 0,
 		"import/prefer-default-export": 0,
@@ -50,6 +51,7 @@
 		"no-restricted-syntax": [2, "LabeledStatement", "WithStatement"],
 		"no-shadow": 0,
 		"no-tabs": 0,
+		"no-undef": 0,
 		"no-unused-vars": [1, {
 			"vars": "all",
 			"varsIgnorePattern": "_",
