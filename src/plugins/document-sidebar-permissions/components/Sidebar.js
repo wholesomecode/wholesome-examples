@@ -5,7 +5,7 @@
  * HOC. These are contained within their own components folder ../containers.
  *
  * Note that post metadata is used within this component. This is registered via
- * PHP within /inc/editor/sidebar-permissions.
+ * PHP within /inc/sidebar-permissions.
  *
  * This example also contains a link button that will automatically open the
  * permissions sidebar when clicked.

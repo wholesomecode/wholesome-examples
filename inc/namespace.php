@@ -42,12 +42,13 @@ function setup() : void {
 	 */
 
 	/**
-	 * Editor.
+	 * Sidebar Permissions.
 	 *
-	 * PHP functions that relate to the WordPress block editor (gutenberg).
+	 * Load the PHP methods that support the block editor plugin within
+	 * /src/plugins/sidebar-permissions.
 	 */
-	require_once ROOT_DIR . '/inc/editor/namespace.php';
-	Editor\setup();
+	require_once ROOT_DIR . '/inc/sidebar-permissions/namespace.php';
+	SidebarPermissions\setup();
 
 	/**
 	 * Site Health.
