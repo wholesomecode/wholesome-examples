@@ -6,6 +6,8 @@ object-assign
 
 /*! ../../../settings */
 
+/*! ../../sidebar-permissions/components/Sidebar */
+
 /*! ../components/Sidebar */
 
 /*! ../helpers/typeof */
@@ -27,6 +29,8 @@ object-assign
 /*! ./factoryWithTypeCheckers */
 
 /*! ./lib/ReactPropTypesSecret */
+
+/*! ./plugins/document-sidebar-permissions */
 
 /*! ./plugins/sidebar-permissions */
 
@@ -169,6 +173,10 @@ object-assign
   \***********************************************************/
 
 /*!***********************************************************!*\
+  !*** ./src/plugins/document-sidebar-permissions/index.js ***!
+  \***********************************************************/
+
+/*!***********************************************************!*\
   !*** multi ./src/block-editor.js ./src/block-editor.scss ***!
   \***********************************************************/
 
@@ -211,6 +219,14 @@ object-assign
 /*!**********************************************************************!*\
   !*** ./node_modules/@babel/runtime/helpers/assertThisInitialized.js ***!
   \**********************************************************************/
+
+/*!************************************************************************!*\
+  !*** ./src/plugins/document-sidebar-permissions/components/Sidebar.js ***!
+  \************************************************************************/
+
+/*!************************************************************************!*\
+  !*** ./src/plugins/document-sidebar-permissions/containers/Sidebar.js ***!
+  \************************************************************************/
 
 /*!**************************************************************************!*\
   !*** ./node_modules/@babel/runtime/helpers/possibleConstructorReturn.js ***!
