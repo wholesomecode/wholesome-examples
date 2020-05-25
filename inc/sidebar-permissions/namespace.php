@@ -45,6 +45,17 @@ const ACCESS_URL  = 'https://wholesome-examples.test/'; // Example only, homepag
 /**
  * Setup
  *
+ * - register_meta_fields - Registers the meta fields.
+ *
+ * - block_settings - allows us to inject settings so they can be
+ *   read by the block editor.
+ *
+ * - set_header_code - set the header code if the post has login required
+ *   and the const is set appropriately.
+ *
+ * - set_template - set the template if the post has login required
+ *   and the const is set appropriately.
+ *
  * @return void
  */
 function setup() : void {
@@ -106,35 +117,62 @@ function block_settings( $settings ) : array {
 /**
  * Set Header Code.
  *
+ * If login is required for a post set the header code.
+ *
  * @return void
  */
 function set_header_code() : void {
 	global $post, $wp_query;
 
+	// If this is not a single post, bail.
 	if ( is_admin() || ! is_singular() || ! $post ) {
 		return;
 	}
 
 	$login_required = get_post_meta( $post->ID, META_LOGIN_REQUIRED, true );
 
+	// If the login is not required, bail.
 	if ( ! $login_required ) {
 		return;
 	}
 
+	/**
+	 * Redirect.
+	 *
+	 * Redirect will always be a 302 in this context, as a 301
+	 * would be cached, so we would not be able to visit the page
+	 * if the setting was changed.
+	 */
 	if ( 'Redirect' === ACCESS_TYPE ) {
-		// Do a redirect.
-		wp_safe_redirect( ACCESS_URL, 302 ); // Hardcoded status code.
+		wp_safe_redirect( ACCESS_URL, 302 );
 		exit;
 	}
 
+	/**
+	 * 404 Not Found.
+	 *
+	 * Set the header of the page to 404 Not Found.
+	 *
+	 * If we are changing the template, we do not want
+	 * to set the wp_query 404, as that will load the
+	 * 404 template.
+	 */
 	if ( 404 === ACCESS_CODE ) {
-		// Do a 404.
 		if ( 'Template' !== ACCESS_TYPE ) {
 			$wp_query->set_404();
 		}
 		status_header( ACCESS_CODE );
 	}
 
+	/**
+	 * 402 Payment Required.
+	 *
+	 * The final option is to set the header status to
+	 * 402 Payment Required.
+	 *
+	 * Any other status codes are not supported and a 200
+	 * will be returned by default.
+	 */
 	if ( 402 === ACCESS_CODE ) {
 		status_header( ACCESS_CODE );
 	}
@@ -149,12 +187,14 @@ function set_header_code() : void {
 function set_template( $template ) {
 	global $post;
 
+	// If this is not a single post, bail.
 	if ( is_admin() || ! is_singular() || ! $post ) {
 		return $template;
 	}
 
 	$login_required = get_post_meta( $post->ID, META_LOGIN_REQUIRED, true );
 
+	// If the login is not required, bail.
 	if ( ! $login_required ) {
 		return $template;
 	}
@@ -162,9 +202,18 @@ function set_template( $template ) {
 	$permitted_status_codes    = [ 200, 402, 404 ];
 	$has_permitted_status_code = in_array( ACCESS_CODE, $permitted_status_codes, true );
 
+	// If the access type is not Template, or the incorrect status code has been set, bail.
 	if ( 'Template' !== ACCESS_TYPE || ! $has_permitted_status_code ) {
 		return $template;
 	}
 
+	/**
+	 * Template File.
+	 *
+	 * This would usually be within your theme, and contain whatever information or form
+	 * you need.
+	 *
+	 * However in this example it includes a file from the plugin.
+	 */
 	return ROOT_DIR . '/templates/template.php';
 }
