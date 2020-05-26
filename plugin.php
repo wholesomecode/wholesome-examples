@@ -32,7 +32,7 @@ const PLUGIN_SLUG   = 'wholesomecode-wholesome-examples';
 const ROOT_DIR      = __DIR__;
 const ROOT_FILE     = __FILE__;
 
-require_once ROOT_DIR . '/inc/namespace.php';
+require_once ROOT_DIR . '/inc/main.php';
 
 /**
  * Load Plugin

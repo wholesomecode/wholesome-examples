@@ -47,7 +47,7 @@ function setup() : void {
 	 * Load the PHP methods that support the block editor plugin within
 	 * /src/plugins/sidebar-permissions.
 	 */
-	require_once ROOT_DIR . '/inc/sidebar-permissions/namespace.php';
+	require_once ROOT_DIR . '/inc/sidebar-permissions/sidebar-permissions.php';
 	SidebarPermissions\setup();
 
 	/**
@@ -57,7 +57,7 @@ function setup() : void {
 	 * the removal of the Site Health menu item (`remove_submenu_page`) and the
 	 * Site Health dashboard widget (`remove_meta_box`).
 	 */
-	require_once ROOT_DIR . '/inc/site-health/namespace.php';
+	require_once ROOT_DIR . '/inc/site-health/site-health.php';
 	SiteHealth\setup();
 }
 
