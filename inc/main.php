@@ -45,6 +45,15 @@ function setup() : void {
 	 * Sidebar Permissions.
 	 *
 	 * Load the PHP methods that support the block editor plugin within
+	 * /src/plugins/block-permissions.
+	 */
+	require_once ROOT_DIR . '/inc/block-permissions/block-permissions.php';
+	BlockPermissions\setup();
+
+	/**
+	 * Sidebar Permissions.
+	 *
+	 * Load the PHP methods that support the block editor plugin within
 	 * /src/plugins/sidebar-permissions.
 	 */
 	require_once ROOT_DIR . '/inc/sidebar-permissions/sidebar-permissions.php';

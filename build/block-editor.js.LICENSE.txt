@@ -24,11 +24,15 @@ object-assign
 
 /*! ./containers/Sidebar */
 
+/*! ./containers/withInspectorAdvancedControls */
+
 /*! ./edit */
 
 /*! ./factoryWithTypeCheckers */
 
 /*! ./lib/ReactPropTypesSecret */
+
+/*! ./plugins/block-permissions */
 
 /*! ./plugins/document-sidebar-permissions */
 
@@ -37,6 +41,8 @@ object-assign
 /*! ./save */
 
 /*! ./setPrototypeOf */
+
+/*! ./settings/attributes */
 
 /*! /Users/mattwatson/Sites/wholesome-examples/app/public/wp-content/plugins/wholesome-examples/src/block-editor.js */
 
@@ -64,7 +70,11 @@ object-assign
 
 /*! @wordpress/edit-post */
 
+/*! @wordpress/editor */
+
 /*! @wordpress/element */
+
+/*! @wordpress/hooks */
 
 /*! @wordpress/i18n */
 
@@ -120,8 +130,16 @@ object-assign
   !*** ./node_modules/react-is/index.js ***!
   \****************************************/
 
+/*!****************************************!*\
+  !*** external {"this":["wp","hooks"]} ***!
+  \****************************************/
+
 /*!*****************************************!*\
   !*** external {"this":["wp","blocks"]} ***!
+  \*****************************************/
+
+/*!*****************************************!*\
+  !*** external {"this":["wp","editor"]} ***!
   \*****************************************/
 
 /*!******************************************!*\
@@ -151,6 +169,10 @@ object-assign
 /*!*********************************************!*\
   !*** external {"this":["wp","components"]} ***!
   \*********************************************/
+
+/*!************************************************!*\
+  !*** ./src/plugins/block-permissions/index.js ***!
+  \************************************************/
 
 /*!**************************************************!*\
   !*** ./src/plugins/sidebar-permissions/index.js ***!
@@ -192,6 +214,10 @@ object-assign
   !*** ./node_modules/prop-types/lib/ReactPropTypesSecret.js ***!
   \*************************************************************/
 
+/*!**************************************************************!*\
+  !*** ./src/plugins/block-permissions/settings/attributes.js ***!
+  \**************************************************************/
+
 /*!***************************************************************!*\
   !*** ./node_modules/@babel/runtime/helpers/classCallCheck.js ***!
   \***************************************************************/
@@ -231,6 +257,10 @@ object-assign
 /*!**************************************************************************!*\
   !*** ./node_modules/@babel/runtime/helpers/possibleConstructorReturn.js ***!
   \**************************************************************************/
+
+/*!***********************************************************************************!*\
+  !*** ./src/plugins/block-permissions/containers/withInspectorAdvancedControls.js ***!
+  \***********************************************************************************/
 
 /** @license React v16.13.1
  * react-is.development.js

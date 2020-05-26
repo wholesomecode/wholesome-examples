@@ -6,6 +6,7 @@
  */
 
 // Import plugins
+import './plugins/block-permissions';
 import './plugins/document-sidebar-permissions';
 import './plugins/sidebar-permissions';
 

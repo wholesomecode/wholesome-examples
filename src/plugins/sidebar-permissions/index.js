@@ -1,4 +1,10 @@
 /**
+ * Sidebar Permissions.
+ *
+ * A plugin to create a custom sidebar that contains permission options.
+ */
+
+/**
  * WordPress Imports.
  *
  * RegisterPlugin
