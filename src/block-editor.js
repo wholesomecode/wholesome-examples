@@ -5,7 +5,7 @@
  * WordPress block editor (Gutenberg).
  */
 
-// import plugins
+// Import plugins
 import './plugins/document-sidebar-permissions';
 import './plugins/sidebar-permissions';
 

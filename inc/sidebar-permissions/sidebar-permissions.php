@@ -63,6 +63,14 @@ function setup() : void {
 	add_filter( PLUGIN_PREFIX . '_block_settings', __NAMESPACE__ . '\\block_settings' );
 	add_action( 'wp', __NAMESPACE__ . '\\set_header_code' );
 	add_filter( 'template_include', __NAMESPACE__ . '\\set_template' );
+
+	/**
+	 * Classic Meta Boxes.
+	 *
+	 * Provide meta box based fallback for classic editor users.
+	 */
+	require_once ROOT_DIR . '/inc/sidebar-permissions/classic-meta-boxes.php';
+	ClassicMetaBoxes\setup();
 }
 
 /**
