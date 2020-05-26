@@ -14,7 +14,7 @@ use const WholesomeCode\WholesomeExamples\PLUGIN_PREFIX;
 use const WholesomeCode\WholesomeExamples\ROOT_DIR;
 
 // The Meta Key for the Login Required Meta Field.
-const META_LOGIN_REQUIRED = PLUGIN_PREFIX . '_login_required';
+const META_KEY_LOGIN_REQUIRED = PLUGIN_PREFIX . '_login_required';
 
 /**
  * Access.
@@ -94,7 +94,7 @@ function register_meta_fields() : void {
 	foreach ( $post_types as $post_type ) {
 		register_post_meta(
 			$post_type,
-			META_LOGIN_REQUIRED,
+			META_KEY_LOGIN_REQUIRED,
 			[
 				'auth_callback' => function() {
 					return current_user_can( 'edit_posts' );
@@ -117,7 +117,7 @@ function register_meta_fields() : void {
  * @return array
  */
 function block_settings( $settings ) : array {
-	$settings['metaKeyLoginRequired'] = META_LOGIN_REQUIRED;
+	$settings['metaKeyLoginRequired'] = META_KEY_LOGIN_REQUIRED;
 
 	return $settings;
 }
@@ -137,7 +137,7 @@ function set_header_code() : void {
 		return;
 	}
 
-	$login_required = get_post_meta( $post->ID, META_LOGIN_REQUIRED, true );
+	$login_required = get_post_meta( $post->ID, META_KEY_LOGIN_REQUIRED, true );
 
 	// If the login is not required, bail.
 	if ( ! $login_required ) {
@@ -189,10 +189,12 @@ function set_header_code() : void {
 /**
  * Set Template.
  *
- * @param [type] $template
- * @return void
+ * If login is required for a post set the template.
+ *
+ * @param string $template The template path.
+ * @return string
  */
-function set_template( $template ) {
+function set_template( $template ) : string {
 	global $post;
 
 	// If this is not a single post, bail.
@@ -200,7 +202,7 @@ function set_template( $template ) {
 		return $template;
 	}
 
-	$login_required = get_post_meta( $post->ID, META_LOGIN_REQUIRED, true );
+	$login_required = get_post_meta( $post->ID, META_KEY_LOGIN_REQUIRED, true );
 
 	// If the login is not required, bail.
 	if ( ! $login_required ) {
