@@ -144,6 +144,11 @@ function set_header_code() : void {
 		return;
 	}
 
+	// If the user is logged in, bail.
+	if ( is_user_logged_in() ) {
+		return;
+	}
+
 	/**
 	 * Redirect.
 	 *
@@ -206,6 +211,11 @@ function set_template( $template ) : string {
 
 	// If the login is not required, bail.
 	if ( ! $login_required ) {
+		return $template;
+	}
+
+	// If the user is logged in, bail.
+	if ( is_user_logged_in() ) {
 		return $template;
 	}
 
