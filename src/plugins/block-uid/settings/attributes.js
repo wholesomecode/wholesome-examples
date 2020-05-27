@@ -12,7 +12,7 @@ export default ( settings ) => {
 		...settings,
 		attributes: {
 			...attributes,
-			timeStamp: {
+			uid: {
 				type: 'string',
 				default: '',
 			},

@@ -8,7 +8,7 @@
  * Third Party Imports.
  *
  * - _isEmpty
- *   Lodash is empty checks if something is truely empty.
+ *   Lodash is empty checks if something is truly empty.
  *   @see https://lodash.com/docs/4.17.15#isEmpty
  */
 import _isEmpty from 'lodash/isEmpty';
@@ -49,11 +49,11 @@ export default createHigherOrderComponent( ( BlockEdit ) => {
 
 		// Extract attributes.
 		const {
-			timeStamp,
+			uid,
 		} = attributes;
 
-		if ( _isEmpty( timeStamp ) ) {
-			setAttributes( { timeStamp: new Date().valueOf().toString() } );
+		if ( _isEmpty( uid ) ) {
+			setAttributes( { uid: new Date().valueOf().toString() } );
 		}
 
 		// Load original component.
@@ -65,7 +65,7 @@ export default createHigherOrderComponent( ( BlockEdit ) => {
 	// Component Typechecking.
 	withTimeStamp.propTypes = {
 		attributes: PropTypes.shape( {
-			timeStamp: PropTypes.string,
+			uid: PropTypes.string,
 		} ).isRequired,
 		setAttributes: PropTypes.func.isRequired,
 	};

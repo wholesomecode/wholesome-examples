@@ -22,9 +22,13 @@ import { addFilter } from '@wordpress/hooks';
  *
  * - withTimeStamp
  *   Pre-populate the Time Stamp.
+ *
+ * - uid
+ *   Save extra props. Currently has issues.
  */
 import attributes from './settings/attributes';
 import withTimeStamp from './containers/withTimeStamp';
+// import uid from './extra-props/uid';
 
 /**
  * Attributes.
@@ -63,3 +67,23 @@ addFilter(
 	'wholesome-examples/block-uid-generator',
 	withTimeStamp
 );
+
+/**
+ * UID
+ *
+ * A better way to add props on save, but currently has issues.
+ * It will break all the blocks when used.
+ * @see https://github.com/WordPress/gutenberg/issues/22386
+ */
+// addFilter(
+// 	'blocks.getSaveContent.extraProps',
+// 	'wholesome-examples/block-uid-generator',
+// 	( props, blockType ) => {
+// 		// Restrict block types.
+// 		if ( blockType.name !== 'core/paragraph' ) {
+// 			// return props;
+// 		}
+
+// 		return uid( props );
+// 	}
+// );
