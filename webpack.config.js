@@ -216,8 +216,11 @@ module.exports = {
 		...defaultConfig.plugins,
 		new IgnoreEmitWebPackPlugin( [
 			'admin.asset.php',
+			'block-styles.asset.php',
+			'classic-editor.asset.php',
 			'customizer.asset.php',
 			'scripts.asset.php',
+			'styles.asset.php',
 		] ),
 		new FriendlyErrorsWebpackPlugin(),
 		new StylelintWebpackPlugin( {
