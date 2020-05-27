@@ -24,7 +24,7 @@ object-assign
 
 /*! ./containers/Sidebar */
 
-/*! ./containers/withInspectorAdvancedControls */
+/*! ./containers/withInspectorControls */
 
 /*! ./edit */
 
@@ -60,6 +60,8 @@ object-assign
 
 /*! @babel/runtime/helpers/possibleConstructorReturn */
 
+/*! @wordpress/block-editor */
+
 /*! @wordpress/blocks */
 
 /*! @wordpress/components */
@@ -69,8 +71,6 @@ object-assign
 /*! @wordpress/data */
 
 /*! @wordpress/edit-post */
-
-/*! @wordpress/editor */
 
 /*! @wordpress/element */
 
@@ -138,10 +138,6 @@ object-assign
   !*** external {"this":["wp","blocks"]} ***!
   \*****************************************/
 
-/*!*****************************************!*\
-  !*** external {"this":["wp","editor"]} ***!
-  \*****************************************/
-
 /*!******************************************!*\
   !*** ./node_modules/prop-types/index.js ***!
   \******************************************/
@@ -169,6 +165,10 @@ object-assign
 /*!*********************************************!*\
   !*** external {"this":["wp","components"]} ***!
   \*********************************************/
+
+/*!**********************************************!*\
+  !*** external {"this":["wp","blockEditor"]} ***!
+  \**********************************************/
 
 /*!************************************************!*\
   !*** ./src/plugins/block-permissions/index.js ***!
@@ -258,9 +258,9 @@ object-assign
   !*** ./node_modules/@babel/runtime/helpers/possibleConstructorReturn.js ***!
   \**************************************************************************/
 
-/*!***********************************************************************************!*\
-  !*** ./src/plugins/block-permissions/containers/withInspectorAdvancedControls.js ***!
-  \***********************************************************************************/
+/*!***************************************************************************!*\
+  !*** ./src/plugins/block-permissions/containers/withInspectorControls.js ***!
+  \***************************************************************************/
 
 /** @license React v16.13.1
  * react-is.development.js

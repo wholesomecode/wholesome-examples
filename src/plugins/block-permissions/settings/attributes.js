@@ -16,6 +16,10 @@ export default ( settings ) => {
 				default: false,
 				type: 'boolean',
 			},
+			logoutRequired: {
+				default: false,
+				type: 'boolean',
+			},
 		},
 	};
 };

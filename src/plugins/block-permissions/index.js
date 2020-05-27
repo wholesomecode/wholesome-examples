@@ -21,11 +21,16 @@ import { addFilter } from '@wordpress/hooks';
  *   Add additional attributes so that control settings can be saved.
  *
  * - withInspectorAdvancedControls
- *   Add a Higher-Order Component (HOC) to provide additional Inspector
+ *   Example: Add a Higher-Order Component (HOC) to provide additional Inspector
  *   Controls within the 'Advanced' section of the sidebar.
+ *
+ * - withInspectorControls
+ *   Add a Higher-Order Component (HOC) to provide additional Inspector
+ *   Controls within a custom section of the sidebar.
  */
 import attributes from './settings/attributes';
-import withInspectorAdvancedControls from './containers/withInspectorAdvancedControls';
+// import withInspectorAdvancedControls from './containers/withInspectorAdvancedControls';
+import withInspectorControls from './containers/withInspectorControls';
 
 /**
  * Attributes.
@@ -62,5 +67,6 @@ addFilter(
 addFilter(
 	'editor.BlockEdit',
 	'wholesome-examples/block-permissions-inspector',
-	withInspectorAdvancedControls
+	// withInspectorAdvancedControls
+	withInspectorControls
 );

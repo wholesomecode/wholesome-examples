@@ -1,8 +1,8 @@
 /**
- * Inspector Advanced Controls.
+ * Inspector Controls.
  *
- * Inspector Advanced Controls adds additional controls in the block
- * sidebar, under the 'Advanced' section.
+ * Inspector Controls adds additional controls in the block
+ * sidebar, under a custom section.
  */
 
 /**
@@ -17,9 +17,13 @@ import PropTypes from 'prop-types';
 /**
  * WordPress Imports.
  *
- * - InspectorAdvancedControls
- *   Adds inspector controls into the 'advanced' section of the block sidebar.
- *   @see https://developer.wordpress.org/block-editor/packages/packages-block-editor/#InspectorAdvancedControls
+ * - InspectorControls
+ *   Adds inspector controls into a custom section of the block sidebar.
+ *   @see https://developer.wordpress.org/block-editor/packages/packages-block-editor/#InspectorControls
+ *
+ * - PanelBody
+ *   The PanelBody creates a collapsible container that can be toggled open or closed.
+ *   @see https://developer.wordpress.org/block-editor/components/panel/#panelbody
  *
  * - ToggleControl
  *   ToggleControl is used to generate a toggle user interface.
@@ -37,24 +41,23 @@ import PropTypes from 'prop-types';
  *   Internationalization - multilingual translation support.
  *   @see https://developer.wordpress.org/block-editor/developers/internationalization/
  */
-import { InspectorAdvancedControls } from '@wordpress/block-editor';
-import { Disabled, ToggleControl } from '@wordpress/components';
+import { InspectorControls } from '@wordpress/block-editor';
+import { Disabled, PanelBody, ToggleControl } from '@wordpress/components';
 import { createHigherOrderComponent } from '@wordpress/compose';
 import { Fragment }	from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 
-
 /**
- * Inspector Advanced Controls.
+ * Inspector Controls.
  *
  * Create a Higher-Order Component to add additional Inspector Controls
- * (Advanced in this instance) to the block.
+ * to the block.
  *
  * BlockEdit loads in the original block edit function, so this
  * component essentially wraps the original. Hence it is Higher-Order.
  */
 export default createHigherOrderComponent( ( BlockEdit ) => {
-	const withInspectorAdvancedControls = ( props ) => {
+	const withInspectorControls = ( props ) => {
 		// Extract props.
 		const {
 			attributes,
@@ -71,53 +74,60 @@ export default createHigherOrderComponent( ( BlockEdit ) => {
 		return (
 			<Fragment>
 				<BlockEdit { ...props } />
-				<InspectorAdvancedControls>
-					{
+				<InspectorControls>
+					<PanelBody
+						title={ __( 'Permissions', 'wholesome-examples' ) }
+						initialOpen={ false }
+						icon="lock"
+					>
+						{
 						// Use conditional logic to disable either of the
 						// toggles if the other toggle is on.
 						// TODO: Make this DRY.
-					}
-					{ logoutRequired ? (
-						<Disabled>
+						}
+						{ logoutRequired ? (
+							<Disabled>
+								<ToggleControl
+									label={ __( 'Require Login' ) }
+									checked={ loginRequired }
+									onChange={ ( loginRequired ) => setAttributes( { loginRequired } ) }
+									help={ __( 'User must be logged-in in to view this block.', 'wholesome-examples' ) }
+								/>
+							</Disabled>
+						) : (
 							<ToggleControl
 								label={ __( 'Require Login' ) }
 								checked={ loginRequired }
 								onChange={ ( loginRequired ) => setAttributes( { loginRequired } ) }
 								help={ __( 'User must be logged-in in to view this block.', 'wholesome-examples' ) }
 							/>
-						</Disabled>
-					) : (
-						<ToggleControl
-							label={ __( 'Require Login' ) }
-							checked={ loginRequired }
-							onChange={ ( loginRequired ) => setAttributes( { loginRequired } ) }
-							help={ __( 'User must be logged-in in to view this block.', 'wholesome-examples' ) }
-						/>
-					) }
-					{ loginRequired ? (
-						<Disabled>
+						) }
+						{ loginRequired ? (
+							<Disabled>
+								<ToggleControl
+									label={ __( 'Require Logout' ) }
+									checked={ logoutRequired }
+									onChange={ ( logoutRequired ) => setAttributes( { logoutRequired } ) }
+									help={ __( 'User must be logged-out in to view this block.',
+										'wholesome-examples' ) }
+								/>
+							</Disabled>
+						) : (
 							<ToggleControl
 								label={ __( 'Require Logout' ) }
 								checked={ logoutRequired }
 								onChange={ ( logoutRequired ) => setAttributes( { logoutRequired } ) }
 								help={ __( 'User must be logged-out in to view this block.', 'wholesome-examples' ) }
 							/>
-						</Disabled>
-					) : (
-						<ToggleControl
-							label={ __( 'Require Logout' ) }
-							checked={ logoutRequired }
-							onChange={ ( logoutRequired ) => setAttributes( { logoutRequired } ) }
-							help={ __( 'User must be logged-out in to view this block.', 'wholesome-examples' ) }
-						/>
-					) }
-				</InspectorAdvancedControls>
+						) }
+					</PanelBody>
+				</InspectorControls>
 			</Fragment>
 		);
 	};
 
 	// Component Typechecking.
-	withInspectorAdvancedControls.propTypes = {
+	withInspectorControls.propTypes = {
 		attributes: PropTypes.shape( {
 			loginRequired: PropTypes.bool,
 			logoutRequired: PropTypes.bool,
@@ -126,5 +136,5 @@ export default createHigherOrderComponent( ( BlockEdit ) => {
 	};
 
 	// Return the Higher-Order Component.
-	return withInspectorAdvancedControls;
-}, 'withInspectorAdvancedControls' );
+	return withInspectorControls;
+}, 'withInspectorControls' );
