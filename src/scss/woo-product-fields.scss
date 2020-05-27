@@ -1,0 +1,28 @@
+/**
+ * Woo Product Fields.
+ *
+ * Implement styles for our Woo Product Fields example.
+ */
+
+.single-product {
+
+	form.cart {
+
+		input {
+			margin-bottom: 1em;
+
+			&.large-text {
+				width: 100%;
+			}
+		}
+
+		select {
+			margin-bottom: 1em;
+
+			&.large-text {
+				width: 100%;
+			}
+		}
+
+	}
+}

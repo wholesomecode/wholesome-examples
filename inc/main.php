@@ -68,6 +68,14 @@ function setup() : void {
 	 */
 	require_once ROOT_DIR . '/inc/site-health/site-health.php';
 	SiteHealth\setup();
+
+	/**
+	 * Woo Product Fields.
+	 *
+	 * Example additional product fields for WooCommerce.
+	 */
+	require_once ROOT_DIR . '/inc/woo-product-fields/woo-product-fields.php';
+	WooProductFields\setup();
 }
 
 /**
