@@ -1,7 +1,7 @@
 /**
- * Block GUID.
+ * Block UID.
  *
- * A plugin to add a guid into each block, so that data relating to it can
+ * A plugin to add a unique id (uid) into each block, so that data relating to it can
  * be stored as meta.
  */
 
@@ -36,7 +36,7 @@ import withTimeStamp from './containers/withTimeStamp';
  */
 addFilter(
 	'blocks.registerBlockType',
-	'wholesome-examples/block-guid-attributes',
+	'wholesome-examples/block-uid-attributes',
 	( settings ) => {
 		// Restrict block types.
 		// if ( settings.name !== 'core/image' ) {
@@ -51,7 +51,7 @@ addFilter(
 /**
  * Time Stamp.
  *
- * Ensure the time stamp GUID is set for all blocks.
+ * Ensure the time stamp UID is set for all blocks.
  *
  * Note that if we wanted to add multiple higher order components we
  * could do so with `compose`.
@@ -60,6 +60,6 @@ addFilter(
  */
 addFilter(
 	'editor.BlockEdit',
-	'wholesome-examples/block-permissions-inspector',
+	'wholesome-examples/block-uid-generator',
 	withTimeStamp
 );

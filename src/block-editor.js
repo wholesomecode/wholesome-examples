@@ -6,8 +6,8 @@
  */
 
 // Import plugins
-import './plugins/block-guid';
 import './plugins/block-permissions';
+import './plugins/block-uid';
 import './plugins/document-sidebar-permissions';
 import './plugins/sidebar-permissions';
 

@@ -1,7 +1,7 @@
 /**
  * Time Stamp.
  *
- * Ensure the time stamp GUID is set for all blocks.
+ * Ensure the time stamp UID is set for all blocks.
  */
 
 /**
