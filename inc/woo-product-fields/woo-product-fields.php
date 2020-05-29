@@ -5,6 +5,14 @@
  * Example additional product fields for WooCommerce.
  * Examples based on https://pluginrepublic.com/add-custom-cart-item-data-in-woocommerce/
  *
+ * TODO:
+ * - Ensure that when payment is complete the order status is changed to complete.
+ * - Implement code to rollback subscribers that have a cancelled or failed order.
+ * - Add subscribe date meta data to users to tie them to subscriptions.
+ * - Add order number meta data to users to tie them to order if cancelled or failed.
+ * - What happens if a user already has an account?
+ * - Send welcome emails when user added to a site.
+ *
  * @package wholesomecode/wholesome_examples
  */
 
@@ -26,6 +34,7 @@ const META_KEY_SITE          = 'user-site';
  * - Add product field information to the cart.
  * - Render product field information on the cart.
  * - Add custom meta to the order.
+ * - Action on payment complete.
  *
  * @return void
  */
@@ -59,7 +68,7 @@ function setup() : void {
 	add_action( 'woocommerce_checkout_create_order_line_item', __NAMESPACE__ . '\\add_product_data_to_order', 10, 4 );
 
 	// On payment, process the order and create the users.
-	// TODO.
+	add_action( 'woocommerce_order_status_completed', __NAMESPACE__ . '\\on_order_complete', 10, 1 );
 
 }
 
@@ -162,7 +171,7 @@ function validate_product_fields( $passed, $product_id, $quantity, $variation_id
 	}
 
 	$email_address = sanitize_email( $_POST[ META_KEY_EMAIL_ADDRESS ] ); // @codingStandardsIgnoreLine
-	$site          = sanitize_text_string( $_POST[ META_KEY_SITE ] );    // @codingStandardsIgnoreLine
+	$site          = sanitize_text_field( $_POST[ META_KEY_SITE ] );    // @codingStandardsIgnoreLine
 
 	if ( empty( $email_address ) ) {
 		$passed = false;
@@ -197,13 +206,13 @@ function add_cart_item_data( $cart_item_data, $product_id, $variation_id ) : arr
 	}
 
 	$email_address = sanitize_email( $_POST[ META_KEY_EMAIL_ADDRESS ] ); // @codingStandardsIgnoreLine
-	$site          = sanitize_text_string( $_POST[ META_KEY_SITE ] );    // @codingStandardsIgnoreLine
+	$site          = sanitize_text_field( $_POST[ META_KEY_SITE ] );    // @codingStandardsIgnoreLine
 
 	if ( isset( $email_address ) ) {
 		$cart_item_data[ CART_KEY_EMAIL_ADDRESS ] = $email_address;
 	}
 	if ( isset( $site ) ) {
-		$cart_item_data[ META_KEY_SITE ] = $site;
+		$cart_item_data[ CART_KEY_SITE ] = $site;
 	}
 	return $cart_item_data;
 }
@@ -245,10 +254,107 @@ function render_cart_item_data( $item_data, $cart_item_data ) : array {
 function add_product_data_to_order( $item, $cart_item_key, $values, $order ) {
 
 	if ( isset( $values[ CART_KEY_EMAIL_ADDRESS ] ) ) {
-		$item->add_meta_data( esc_html__( 'Email Address', 'wholesome-examples' ), $values[ CART_KEY_EMAIL_ADDRESS ], true );
+		$item->add_meta_data( esc_attr__( 'Email Address', 'wholesome-examples' ), $values[ CART_KEY_EMAIL_ADDRESS ], true );
 	}
 
 	if ( isset( $values[ CART_KEY_SITE ] ) ) {
-		$item->add_meta_data( esc_html__( 'Site', 'wholesome-examples' ), $values[ CART_KEY_SITE ], true );
+		$item->add_meta_data( esc_attr__( 'Site', 'wholesome-examples' ), $values[ CART_KEY_SITE ], true );
 	}
+}
+
+/**
+ * On order complete.
+ *
+ * On order complete, check that we have a valid email address and site,
+ * if so create a subscriber to that site.
+ *
+ * @param int $order_id The order ID.
+ * @return void
+ */
+function on_order_complete( $order_id ) : void {
+	$order      = wc_get_order( $order_id );
+	$order_data = $order->get_data();
+
+	foreach ( $order->get_items() as $item_id => $item ) {
+		$email_address = $item->get_meta( esc_attr__( 'Email Address', 'wholesome-examples' ) );
+		$site          = $item->get_meta( esc_attr__( 'Site', 'wholesome-examples' ) );
+		if ( $email_address && is_email( $email_address ) && $site ) {
+			create_subscriber( $email_address, $site );
+		}
+	}
+}
+
+/**
+ * Create Subscriber.
+ *
+ * Create the subscriber from the email address and the site blog name.
+ *
+ * @param string $email_address User email address.
+ * @param string $site The site blog name.
+ * @return void
+ */
+function create_subscriber( $email_address, $site ) : void {
+	// If not a valid email address, bail.
+	if ( ! is_email( $email_address ) ) {
+		return;
+	}
+
+	$site_details = get_site_by_blogname( $site );
+
+	// If we cannot retrieve the site, bail.
+	if ( ! $site_details ) {
+		return;
+	}
+
+	$user_id = null;
+
+	// If user already exists.
+	if ( email_exists( $email_address ) ) {
+		$user    = get_user_by( 'email', $email_address );
+		$user_id = $user->ID;
+
+		// If user is already a member of the blog, bail.
+		if ( is_user_member_of_blog( $user_id, $site_details->blog_id ) ) {
+			return;
+		}
+	} else {
+		// User does not already exist.
+		$user_id = wp_insert_user(
+			[
+				'display_name'  => $email_address,
+				'nickname'      => $email_address,
+				'role'          => '',
+				'user_email'    => $email_address,
+				'user_login'    => $email_address,
+				'user_nicename' => $email_address,
+				'user_pass'     => wp_generate_password(),
+			]
+		);
+
+		// We do not want the user in the current site, we want them in the chosen site.
+		remove_user_from_blog( $user_id, get_current_blog_id() );
+	}
+
+	// If User ID not valid, bail.
+	if ( ! $user_id || is_wp_error( $user_id ) ) {
+		return;
+	}
+
+	// Add the user to blog.
+	add_user_to_blog( $site_details->blog_id, $user_id, 'subscriber' );
+}
+
+
+function get_site_by_blogname( $blogname ) {
+	$sites = get_sites();
+	foreach ( $sites as $site ) {
+		$details = get_blog_details( $site->blog_id );
+		$value   = $details->blogname;
+
+		if ( $value === $blogname ) {
+			return $details;
+		}
+	}
+
+	return false;
 }
