@@ -5,6 +5,9 @@
  * Example additional product fields for WooCommerce.
  * Examples based on https://pluginrepublic.com/add-custom-cart-item-data-in-woocommerce/
  *
+ * This example allows you to create a member by adding a Username and a Multisite Blog name
+ * to an order. After payment is taken, the user is registered as a subscriber to the blog.
+ *
  * TODO:
  * - Ensure that when payment is complete the order status is changed to complete.
  * - Implement code to rollback subscribers that have a cancelled or failed order.

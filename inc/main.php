@@ -42,6 +42,14 @@ function setup() : void {
 	 */
 
 	/**
+	 * Backend Access.
+	 *
+	 * Prevent certain users from accessing the the toolbar or dashboard.
+	 */
+	require_once ROOT_DIR . '/inc/backend-access/backend-access.php';
+	BackendAccess\setup();
+
+	/**
 	 * Sidebar Permissions.
 	 *
 	 * Load the PHP methods that support the block editor plugin within
