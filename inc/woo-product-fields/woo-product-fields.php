@@ -344,7 +344,14 @@ function create_subscriber( $email_address, $site ) : void {
 	add_user_to_blog( $site_details->blog_id, $user_id, 'subscriber' );
 }
 
-
+/**
+ * Get Site by Blogname.
+ *
+ * Small helper function to get the site details by the blogname.
+ *
+ * @param string $blogname The blogname of the site.
+ * @return void
+ */
 function get_site_by_blogname( $blogname ) {
 	$sites = get_sites();
 	foreach ( $sites as $site ) {
