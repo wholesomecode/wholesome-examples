@@ -8,7 +8,12 @@
  * @package wholesomecode/wholesome_examples
  */
 
- namespace WholesomeCode\WholesomeExamples\WooProductFields; // @codingStandardsIgnoreLine
+namespace WholesomeCode\WholesomeExamples\WooProductFields; // @codingStandardsIgnoreLine
+
+const CART_KEY_EMAIL_ADDRESS = 'user_email_address';
+const CART_KEY_SITE          = 'user_site';
+const META_KEY_EMAIL_ADDRESS = 'user-email-address';
+const META_KEY_SITE          = 'user-site';
 
 /**
  * Setup.
@@ -42,7 +47,7 @@ function setup() : void {
 	add_action( 'woocommerce_before_add_to_cart_button', __NAMESPACE__ . '\\add_product_fields' );
 
 	// Validate our custom text input field value.
-	add_filter( 'woocommerce_add_to_cart_validation',  __NAMESPACE__ . '\\validate_product_fields', 10, 4 );
+	add_filter( 'woocommerce_add_to_cart_validation', __NAMESPACE__ . '\\validate_product_fields', 10, 4 );
 
 	// Add custom cart item data.
 	add_filter( 'woocommerce_add_cart_item_data', __NAMESPACE__ . '\\add_cart_item_data', 10, 3 );
@@ -113,20 +118,29 @@ function add_product_fields() : void {
 		return;
 	}
 
+	$sites = get_sites();
+
 	?>
-	<div class="user-email-address-wrap">
-		<label for="user-email-address">
+	<div class="<?php echo esc_attr( META_KEY_EMAIL_ADDRESS ); ?>-wrap">
+		<label for="<?php echo esc_attr( META_KEY_EMAIL_ADDRESS ); ?>">
 			<?php esc_html_e( 'Email Address', 'wholesome-examples' ); ?>
 		</label>
-		<input type="text" name='user-email-address' id='user-email-address' value='' class="large-text">
+		<input type="text" name='<?php echo esc_attr( META_KEY_EMAIL_ADDRESS ); ?>' id='<?php echo esc_attr( META_KEY_EMAIL_ADDRESS ); ?>' value='' class="large-text">
 	</div>
-	<div class="user-site-wrap">
-		<label for="user-site">
+	<div class="<?php echo esc_attr( META_KEY_SITE ); ?>-wrap">
+		<label for="<?php echo esc_attr( META_KEY_SITE ); ?>">
 			<?php esc_html_e( 'Site', 'wholesome-examples' ); ?>
 		</label>
-		<select name='user-site' id='user-site' class="large-text">
-			<option value="<?php esc_attr_e( 'root', 'wholesome-examples' ); ?>"><?php esc_html_e( 'Root', 'wholesome-examples' ); ?></option>
-			<option value="<?php esc_attr_e( 'site-1', 'wholesome-examples' ); ?>"><?php esc_html_e( 'Site 1', 'wholesome-examples' ); ?></option>
+		<select name='<?php echo esc_attr( META_KEY_SITE ); ?>' id='<?php echo esc_attr( META_KEY_SITE ); ?>' class="large-text">
+			<?php
+			foreach ( $sites as $site ) {
+				$details = get_blog_details( $site->blog_id );
+				$value   = $details->blogname;
+				?>
+				<option value="<?php echo esc_attr( $value ); ?>"><?php echo esc_html( $value ); ?></option>
+				<?php
+			}
+			?>
 		</select>
 	</div>
 	<?php
@@ -147,14 +161,24 @@ function validate_product_fields( $passed, $product_id, $quantity, $variation_id
 		return $passed;
 	}
 
-	if ( empty( $_POST['user-email-address'] ) ) {
+	$email_address = sanitize_email( $_POST[ META_KEY_EMAIL_ADDRESS ] ); // @codingStandardsIgnoreLine
+	$site          = sanitize_text_string( $_POST[ META_KEY_SITE ] );    // @codingStandardsIgnoreLine
+
+	if ( empty( $email_address ) ) {
 		$passed = false;
 		wc_add_notice( esc_html__( 'Email Address is a required field.', 'wholesome-examples' ), 'error' );
 	}
-	if ( empty( $_POST['user-site'] ) ) {
+
+	if ( ! is_email( $email_address ) ) {
+		$passed = false;
+		wc_add_notice( esc_html__( 'Email Address is not valid.', 'wholesome-examples' ), 'error' );
+	}
+
+	if ( empty( $site ) ) {
 		$passed = false;
 		wc_add_notice( esc_html__( 'Site is a required field.', 'wholesome-examples' ), 'error' );
 	}
+
 	return $passed;
 }
 
@@ -172,11 +196,14 @@ function add_cart_item_data( $cart_item_data, $product_id, $variation_id ) : arr
 		return $cart_item_data;
 	}
 
-	if ( isset( $_POST['user-email-address'] ) ) {
-		$cart_item_data['user_email_address'] = sanitize_text_field( $_POST['user-email-address'] );
+	$email_address = sanitize_email( $_POST[ META_KEY_EMAIL_ADDRESS ] ); // @codingStandardsIgnoreLine
+	$site          = sanitize_text_string( $_POST[ META_KEY_SITE ] );    // @codingStandardsIgnoreLine
+
+	if ( isset( $email_address ) ) {
+		$cart_item_data[ CART_KEY_EMAIL_ADDRESS ] = $email_address;
 	}
-	if ( isset( $_POST['user-site'] ) ) {
-		$cart_item_data['user_site'] = sanitize_text_field( $_POST['user-site'] );
+	if ( isset( $site ) ) {
+		$cart_item_data[ META_KEY_SITE ] = $site;
 	}
 	return $cart_item_data;
 }
@@ -189,16 +216,18 @@ function add_cart_item_data( $cart_item_data, $product_id, $variation_id ) : arr
  * @return array
  */
 function render_cart_item_data( $item_data, $cart_item_data ) : array {
-	if ( isset( $cart_item_data['user_email_address'] ) ) {
+
+	if ( isset( $cart_item_data[ CART_KEY_EMAIL_ADDRESS ] ) ) {
 		$item_data[] = array(
 			'key'   => esc_html__( 'Email Address', 'wholesome-examples' ),
-			'value' => wc_clean( $cart_item_data['user_email_address'] ),
+			'value' => wc_clean( $cart_item_data[ CART_KEY_EMAIL_ADDRESS ] ),
 		);
 	}
-	if ( isset( $cart_item_data['user_site'] ) ) {
+
+	if ( isset( $cart_item_data[ CART_KEY_SITE ] ) ) {
 		$item_data[] = array(
 			'key'   => esc_html__( 'Site', 'wholesome-examples' ),
-			'value' => wc_clean( $cart_item_data['user_site'] ),
+			'value' => wc_clean( $cart_item_data[ CART_KEY_SITE ] ),
 		);
 	}
 	return $item_data;
@@ -214,10 +243,12 @@ function render_cart_item_data( $item_data, $cart_item_data ) : array {
  * @return void
  */
 function add_product_data_to_order( $item, $cart_item_key, $values, $order ) {
-	if ( isset( $values['user_email_address'] ) ) {
-		$item->add_meta_data( esc_html__( 'Email Address', 'wholesome-examples' ), $values['user_email_address'], true );
+
+	if ( isset( $values[ CART_KEY_EMAIL_ADDRESS ] ) ) {
+		$item->add_meta_data( esc_html__( 'Email Address', 'wholesome-examples' ), $values[ CART_KEY_EMAIL_ADDRESS ], true );
 	}
-	if ( isset( $values['user_site'] ) ) {
-		$item->add_meta_data( esc_html__( 'Site', 'wholesome-examples' ), $values['user_site'], true );
+
+	if ( isset( $values[ CART_KEY_SITE ] ) ) {
+		$item->add_meta_data( esc_html__( 'Site', 'wholesome-examples' ), $values[ CART_KEY_SITE ], true );
 	}
 }
