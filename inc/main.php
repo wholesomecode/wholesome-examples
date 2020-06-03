@@ -84,6 +84,14 @@ function setup() : void {
 	 */
 	require_once ROOT_DIR . '/inc/woo-product-fields/woo-product-fields.php';
 	WooProductFields\setup();
+
+	/**
+	 * Yoast JSON LD.
+	 *
+	 * Example additional product @graph area for Yoast SEO JSON LD.
+	 */
+	require_once ROOT_DIR . '/inc/yoast-json-ld/yoast-json-ld.php';
+	YoastJSONLD\setup();
 }
 
 /**
@@ -151,6 +159,7 @@ function enqueue_block_editor_assets() : void {
 
 	$block_editor_scripts = '/build/block-editor.js';
 	$block_editor_styles  = '/build/block-editor.css';
+	$script_asset         = include $block_editor_asset_path;
 
 	/**
 	 * Settings.
