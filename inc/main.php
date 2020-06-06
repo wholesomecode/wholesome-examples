@@ -50,13 +50,21 @@ function setup() : void {
 	BackendAccess\setup();
 
 	/**
-	 * Sidebar Permissions.
+	 * Block Permissions.
 	 *
 	 * Load the PHP methods that support the block editor plugin within
 	 * /src/plugins/block-permissions.
 	 */
 	require_once ROOT_DIR . '/inc/block-permissions/block-permissions.php';
 	BlockPermissions\setup();
+
+	/**
+	 * Settings.
+	 *
+	 * Settings for the Plugin.
+	 */
+	require_once ROOT_DIR . '/inc/settings/settings.php';
+	Settings\setup();
 
 	/**
 	 * Sidebar Permissions.
@@ -231,22 +239,46 @@ function enqueue_plugin_assets() : void {
  */
 function enqueue_admin_assets() : void {
 
+	$admin_asset_path = ROOT_DIR . '/build/admin.asset.php';
+
+	if ( ! file_exists( $admin_asset_path ) ) {
+		throw new Error(
+			esc_html__( 'You need to run `npm start` or `npm run build` in the root of the plugin "wholesomecode/wholesome-examples" first.', 'wholesome-examples' )
+		);
+	}
+
 	$admin_scripts = '/build/admin.js';
 	$admin_styles  = '/build/admin.css';
+	$script_asset  = include $admin_asset_path;
+
+	/**
+	 * Settings.
+	 *
+	 * Settings have a filter so other parts of the plugin can append settings
+	 * without the code
+	 */
+	// Settings has a filter so that other parts of the plugin can append settings.
+	$block_settings = apply_filters( PLUGIN_PREFIX . '_block_settings', get_block_settings() );
 
 	wp_enqueue_script(
 		PLUGIN_SLUG . '-admin',
 		plugins_url( $admin_scripts, ROOT_FILE ),
-		[],
-		filemtime( ROOT_DIR . $admin_scripts ),
+		$script_asset['dependencies'],
+		$script_asset['version'],
 		true
 	);
 
 	wp_enqueue_style(
 		PLUGIN_SLUG . '-admin',
 		plugins_url( $admin_styles, ROOT_FILE ),
-		[],
+		[ 'wp-components' ], // Use Block Editor (Gutenberg) UI elements in admin pages.
 		filemtime( ROOT_DIR . $admin_styles ),
+	);
+
+	wp_localize_script(
+		PLUGIN_SLUG . '-admin',
+		'WholesomeExamplesSettings',
+		$block_settings
 	);
 }
 

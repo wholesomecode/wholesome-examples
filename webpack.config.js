@@ -215,7 +215,7 @@ module.exports = {
 	plugins: [
 		...defaultConfig.plugins,
 		new IgnoreEmitWebPackPlugin( [
-			'admin.asset.php',
+			// 'admin.asset.php',
 			'block-styles.asset.php',
 			'classic-editor.asset.php',
 			'customizer.asset.php',

@@ -13,7 +13,6 @@
  */
 import { addFilter } from '@wordpress/hooks';
 
-
 /**
  * Plugin Imports.
  *
