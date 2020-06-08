@@ -160,7 +160,7 @@ function enqueue_block_editor_assets() : void {
 	$block_editor_asset_path = ROOT_DIR . '/build/block-editor.asset.php';
 
 	if ( ! file_exists( $block_editor_asset_path ) ) {
-		throw new Error(
+		throw new \Error(
 			esc_html__( 'You need to run `npm start` or `npm run build` in the root of the plugin "wholesomecode/wholesome-examples" first.', 'wholesome-examples' )
 		);
 	}
@@ -242,7 +242,7 @@ function enqueue_admin_assets() : void {
 	$admin_asset_path = ROOT_DIR . '/build/admin.asset.php';
 
 	if ( ! file_exists( $admin_asset_path ) ) {
-		throw new Error(
+		throw new \Error(
 			esc_html__( 'You need to run `npm start` or `npm run build` in the root of the plugin "wholesomecode/wholesome-examples" first.', 'wholesome-examples' )
 		);
 	}
